@@ -1,10 +1,14 @@
 import express from "express";
+import cors from "cors";
 import { AuthServiceImpl } from "./infrastructure/services/AuthServiceImpl";
 import { LoginUseCase } from "./core/useCases/LoginUseCase";
+import { RegisterUseCase } from "./core/useCases/RegisterUseCase";
 
 const app = express();
+app.use(cors({ origin: "http://localhost:5173" }));
 const authService = new AuthServiceImpl();
 const loginUseCase = new LoginUseCase(authService);
+const registerUseCase = new RegisterUseCase(authService);
 
 app.use(express.json());
 
@@ -17,7 +21,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   const { email, password, name } = req.body;
-  const user = await authService.register(email, password, name);
+  const user = await registerUseCase.execute(email, password, name);
   if (user) res.json(user);
   else res.status(400).json({ error: "User already exists" });
 });

@@ -1,4 +1,3 @@
-
 import { User } from "../domain/User";
 import { AuthService } from "../ports/AuthService";
 
@@ -9,3 +8,5 @@ export class RegisterUseCase {
     return this.authService.register(email, password, name);
   }
 }
+
+
